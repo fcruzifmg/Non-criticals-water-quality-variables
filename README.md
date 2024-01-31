@@ -1,0 +1,2 @@
+# Non criticals water quality variables
+  This repository contains the R codes related to the selection of non-critical variables, as described in the article "Water Quality Emergency Monitoring Networks: A Method for Identifying Non-critical Variables Based on Shannon's Entropy." By reproducing these codes, any user should have sufficient conditions to fully replicate the methodology created by authors Fábio Cruz and Talita Silva.
