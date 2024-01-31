@@ -100,7 +100,43 @@ estatisticas_red$`Redundância sem 100%`= round(x = estatisticas_red$`Redundânc
 library(openxlsx)
 estatisticas_redundancia_pmqqs_Doce_export = write.xlsx(x = estatisticas_red, file = "D:/UFMG/OneDrive/Área de Trabalho/Estatisticas_redundancia_pmqqs_Doce.xlsx")
   
-  
-  
-  
-  
+#Gerando resultados para gerar gráfico de linhas
+ 
+base_precentis_redundancia = data.frame(matrix(data = 0, nrow = 21, ncol = 2))
+colnames(base_precentis_redundancia) =c("Quantile", "Information redundancy")
+
+base_precentis_redundancia
+for(i in 2:nrow(base_precentis_redundancia)){
+  for(k in 1:ncol(base_precentis_redundancia)){
+    base_precentis_redundancia[i,1]=0
+    base_precentis_redundancia[i,1]=base_precentis_redundancia[i-1,1]+0.05
+  }
+}
+
+base_precentis_redundancia
+for(i in 2:nrow(base_precentis_redundancia)){
+  for(k in 1:ncol(base_precentis_redundancia)){
+    base_precentis_redundancia[i,2]=0
+    base_precentis_redundancia[i,2]=quantile(x = red_pmqqs_final$Var, probs = base_precentis_redundancia[i,1])
+  }
+} 
+
+#Gráfico threshold VRMF
+library(ggplot2)
+limiar_VRMF = ggplot(data = base_precentis_redundancia, mapping = aes(x = base_precentis_redundancia$Quantile, y = base_precentis_redundancia$`Information redundancy`)) +
+  geom_col() + geom_line(size=1, color="blue") + geom_point(size=1.5, color="blue", shape = 15) + labs(title = "Distribution of Information redundancy") + xlab(label = "Quantile") + ylab(label = "Information redundancy") + theme_classic() +
+  theme(title = element_text(face = "bold", size = 18), axis.title.x = element_text(face = "bold", size = 17), axis.title.y = element_text(face = "bold", size = 17), 
+        axis.text = element_text(face = "bold", size = 14)) +
+  geom_hline(yintercept = 80, colour = "red")
+plot(limiar_VRMF)  
+
+#Gráfico threshold VRMF - Tese
+library(ggplot2)
+limiar_VRMF = ggplot(data = base_precentis_redundancia, mapping = aes(x = base_precentis_redundancia$Quantile, y = base_precentis_redundancia$`Information redundancy`)) +
+  geom_col() + xlab(label = "Percentis") + ylab(label = "Redundância informacional") + theme_classic() +
+  theme(title = element_text(face = "bold", size = 18), axis.title.x = element_text(face = "bold", size = 17), axis.title.y = element_text(face = "bold", size = 17), 
+        axis.text = element_text(face = "bold", size = 14)) +
+  geom_hline(yintercept = 80, colour = "red")
+plot(limiar_VRMF)  
+
+
